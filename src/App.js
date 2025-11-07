@@ -1,14 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
-import Test from './test.jsx';
+import Card from './Card/Card.jsx';
+import AddCard from './Card/AddCard.jsx';
+
 
 function App() {
   return (
     <>
-      <Test />
+      <Card />
+      <AddCard />
     </>
+
 
   );
 }
 
 export default App;
+
