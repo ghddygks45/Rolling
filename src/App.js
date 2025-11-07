@@ -1,11 +1,15 @@
-import logo from './logo.svg';
 import './App.css';
-import Primary from './Button/Primary.jsx';
+import Circlebutton from './Button/CircleButton.jsx';
+import IconButton from './Button/iconButton.jsx';
+import DeleteButton from './Button/deleteButton.jsx';
+
 
 function App() {
   return (
-    <>
-      <Primary />
+    <>  
+      <DeleteButton/>
+      <IconButton/>
+      <Circlebutton/>
     </>
   );
 }
