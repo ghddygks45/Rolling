@@ -7,8 +7,8 @@ function Text_field() {
   return (
     <>
       <Input />
-      <SelectBox />
       <Froala />
+      <SelectBox />
     </>
   );
 }
