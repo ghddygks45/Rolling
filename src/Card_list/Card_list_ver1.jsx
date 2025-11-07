@@ -9,7 +9,7 @@ import pattern01 from './assets/pattern01.svg';
 import pattern03 from './assets/pattern03.svg';
 import pattern04 from './assets/pattern04.svg';*/
 
-/* 색깔 배경 */
+/* 색깔 배경(보라색ver ) */
 function CardList() {
   return (
     <>
@@ -24,7 +24,7 @@ function CardList() {
             <span className={styles.moreProfiles}>+27</span>
           </div>
           <div className={styles.writtenRecord}>
-            <span>30명</span>이 작성했어요!
+            <span>30</span>명이 작성했어요!
           </div>
         </div>
         <div className={styles.imojiWrapper}>

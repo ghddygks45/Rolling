@@ -3,7 +3,6 @@ import styles from './Card_list_ver2.module.css';
 import profile01 from './assets/profile01.svg';
 import profile02 from './assets/profile02.svg';
 import profile03 from './assets/profile03.svg';
-import bgImage from './assets/bgImg.avif';
 
 /* 이미지 배경 */
 function CardList2() {
@@ -11,7 +10,7 @@ function CardList2() {
       <div
       className={styles.card}
       style={{
-        backgroundImage: `url(${bgImage})`,
+        backgroundImage: `url('https://mblogthumb-phinf.pstatic.net/MjAyMTAzMDVfOTYg/MDAxNjE0OTU1MTgyMzYz.ozwJXDtUw0V_Gniz6i7qgDOkNs09MX-rJdCcaw6AAeAg.DZivXhGnQDUUx7kgkRXNOEI0DEltAo6p9Jk9SDBbxRcg.JPEG.sosohan_n/IMG_3725.JPG?type=w800')`,
       }}
       >
         <div className={styles.cardHeader}>
