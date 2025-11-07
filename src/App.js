@@ -1,20 +1,18 @@
 import './App.css';
-import Option from './Option/Option.jsx';
-import Header from './Header/Header.jsx'
-import MessageHeader from './Header/MessageHeader.jsx'
-import MobileHeader from './Header/MobileHeader.jsx'
+import Card from './Card/Card.jsx';
+import AddCard from './Card/AddCard.jsx';
 
 
 function App() {
   return (
     <>
-      <Option/>
-      <Header/>
-      <MessageHeader/>
-      <MobileHeader/>
+      <Card />
+      <AddCard />
     </>
+
 
   );
 }
 
 export default App;
+
