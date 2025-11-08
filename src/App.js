@@ -1,8 +1,14 @@
 import './App.css';
-import BadgeEmoji from './Badge/BadgeEmoji';
+import Card from './Card/Card.jsx';
+import AddCard from './Card/AddCard.jsx';
 
 function App() {
-  return <BadgeEmoji emoji="😍" count={24} />;
+  return (
+    <>
+      <Card />
+      <AddCard />
+    </>
+  );
 }
 
 export default App;
