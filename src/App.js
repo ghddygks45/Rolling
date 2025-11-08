@@ -1,13 +1,13 @@
-import logo from './logo.svg';
 import './App.css';
-import Test from './test.jsx';
+import CardList from './Card_list/Card_list_ver1.jsx';
+import CardList2 from './Card_list/Card_list_ver2.jsx';
 
 function App() {
   return (
     <>
-      <Test />
+      <CardList />
+      <CardList2 />
     </>
-
   );
 }
 
