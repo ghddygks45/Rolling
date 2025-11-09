@@ -121,4 +121,20 @@ function Modal({
   )
 }
 
+/* 사용법
+import { useState } from "react";
+
+function App() {
+  const [open, setOpen] = useState(false)
+  return{
+    <button onClick={() => setOpen(true)}>모달 열기</button>
+          <Modal
+            isOpen={open}
+            onClose={() => setOpen(false)}
+            senderName="테스터"
+            content="모달 내용 테스트" 
+          />
+  }
+}
+*/
 export default Modal

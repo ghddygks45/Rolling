@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from "react";
 
 /**
  * Toast 컴포넌트
@@ -9,88 +9,90 @@ import React, { useEffect, useState, useCallback } from 'react'
  * @param {number} duration - 자동 닫힘 시간 (밀리초, 기본값: 5000ms)
  * @param {boolean} showCloseButton - 닫기 버튼 표시 여부 (기본값: true)
  */
-function Toast({ 
-  isOpen = false, 
+function Toast({
+  isOpen = false,
   onClose,
-  message = 'URL이 복사 되었습니다.',
-  type = 'success',
+  message = "URL이 복사 되었습니다.",
+  type = "success",
   duration = 5000,
-  showCloseButton = true
+  showCloseButton = true,
 }) {
-  const [visible, setVisible] = useState(isOpen)
+  const [visible, setVisible] = useState(isOpen);
 
   const handleClose = useCallback(() => {
-    setVisible(false)
+    setVisible(false);
     setTimeout(() => {
-      onClose?.()
-    }, 300) // 애니메이션 시간
-  }, [onClose])
+      onClose?.();
+    }, 300); // 애니메이션 시간
+  }, [onClose]);
 
   useEffect(() => {
-    setVisible(isOpen)
-  }, [isOpen])
+    setVisible(isOpen);
+  }, [isOpen]);
 
   useEffect(() => {
     if (visible && duration > 0) {
       const timer = setTimeout(() => {
-        handleClose()
-      }, duration)
+        handleClose();
+      }, duration);
 
-      return () => clearTimeout(timer)
+      return () => clearTimeout(timer);
     }
-  }, [visible, duration, handleClose])
+  }, [visible, duration, handleClose]);
 
-  if (!visible) return null
+  if (!visible) return null;
 
   // 아이콘 색상 설정
   const iconColors = {
-    success: 'bg-green-500',
-    error: 'bg-error',
-    info: 'bg-blue-500'
-  }
+    success: "bg-green-500",
+    error: "bg-error",
+    info: "bg-blue-500",
+  };
 
   // 체크 아이콘 SVG
   const CheckIcon = () => (
-    <svg 
-      width="24" 
-      height="24" 
-      viewBox="0 0 24 24" 
-      fill="none" 
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className="flex-shrink-0"
     >
-      <path 
-        d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" 
+      <path
+        d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
         fill="white"
       />
     </svg>
-  )
+  );
 
   // 닫기 아이콘 SVG
   const CloseIcon = () => (
-    <svg 
-      width="24" 
-      height="24" 
-      viewBox="0 0 24 24" 
-      fill="none" 
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className="cursor-pointer"
       onClick={handleClose}
     >
-      <path 
-        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" 
+      <path
+        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
         fill="#CCCCCC"
       />
     </svg>
-  )
+  );
 
   return (
     <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50 animate-fade-in">
       <div className="relative w-[524px] h-16 bg-black/80 rounded-lg flex items-center px-[30px]">
         {/* 아이콘과 메시지 */}
         <div className="flex flex-row items-center gap-3 flex-1">
-          {type === 'success' && (
-            <div className={`w-6 h-6 ${iconColors[type]} rounded-full flex items-center justify-center flex-shrink-0`}>
+          {type === "success" && (
+            <div
+              className={`w-6 h-6 ${iconColors[type]} rounded-full flex items-center justify-center flex-shrink-0`}
+            >
               <CheckIcon />
             </div>
           )}
@@ -101,7 +103,7 @@ function Toast({
 
         {/* 닫기 버튼 */}
         {showCloseButton && (
-          <button 
+          <button
             onClick={handleClose}
             className="absolute right-[30px] top-5 w-6 h-6 flex items-center justify-center hover:opacity-70 transition-opacity"
             aria-label="닫기"
@@ -128,7 +130,25 @@ function Toast({
         }
       `}</style>
     </div>
-  )
+  );
 }
+/* 사용법
+import { useState } from "react";
 
-export default Toast
+function App() {
+  const [open, setOpen] = useState(false)
+  return{
+    <div className="p-5">
+          <button onClick={() => setOpen(true)}>토스트 열기</button>
+          <Toast
+            isOpen={open}
+            onClose={() => setOpen(false)}
+            message="테스트 메시지: URL 복사됨!"
+            type="success"
+            duration={3000}
+          />
+        </div>
+  }
+}
+*/
+export default Toast;

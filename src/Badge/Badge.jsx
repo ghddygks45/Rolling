@@ -37,4 +37,13 @@ export {
   BadgeEmoji,
 }
 
+/* 사용법
+      <div className="p-5 flex gap-4 items-center">
+        <Badge type="emoji" emoji="🔥" count={5} />
+        <Badge type="coworker" text="동료" />
+        <Badge type="friend" text="친구" />
+        <Badge type="family" text="가족" />
+        <Badge type="other" text="지인" />
+      </div>
+*/
 export default Badge
