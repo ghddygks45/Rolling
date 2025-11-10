@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import sharingIcon from "./img/sharing.svg";
-import { ReactComponent as PlusIcon } from "./img/plus.svg";
-import { ReactComponent as ArrowIcon } from "./img/Arrow.svg";
+import sharingIcon from "../img/share-24.svg";
+import { ReactComponent as PlusIcon } from "../img/add-24.svg";
+import { ReactComponent as ArrowIcon } from "../img/arrow_down.svg";
 
 function MobileHeader() {
   const [showEmojiMenu, setShowEmojiMenu] = useState(false);
@@ -22,9 +22,14 @@ function MobileHeader() {
       // 드롭다운이 열려있을 때 적용
       ${showShareMenu ? "border-gray-500" : "bg-white hover:bg-gray-100"} 
     `;
+  const shareButtonClasses = `
+      flex items-center justify-center 
+      border border-gray-300 w-[36px] h-[32px] rounded-md 
+      ${showShareMenu ? "border-gray-500" : "bg-white hover:bg-gray-100"}
+      `;
   return (
     <>
-    {/* 수신자 헤더 */}
+      {/* 수신자 헤더 */}
       <div className="flex items-center justify-between w-[360px] h-[52px] bg-white relative px-[20px] py-[12px]">
         <div className="text-gray-800 text-18-bold">To. Ashley Kim</div>
       </div>

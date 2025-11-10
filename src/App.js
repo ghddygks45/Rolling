@@ -1,18 +1,9 @@
-import './App.css';
-import Header from './Header/Header.jsx';
-import MessageHeader from './Header/MessageHeader.jsx';
-import MobileHeader from './Header/MobileHeader.jsx';
-
-
+import "./App.css";
 
 function App() {
   return (
     <>
-      <Header/>
-      <MessageHeader />
-      <MobileHeader/>
     </>
-
   );
 }
 
