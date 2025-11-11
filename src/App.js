@@ -4,7 +4,7 @@ import CreatePostPage from './CreatePostPage/CreatePostPage.jsx';
 function App() {
   return (
     <>
-    <CreatePostPage />
+     <CreatePostPage />
     </>
   );
 }

@@ -6,40 +6,52 @@ import Option from "../Component/Option/Option.jsx";
 import PrimaryMain from "../Component/Button/Primary-main.jsx";
 
 function CreatePostPage() {
-    return (
-        <>
-        <HeaderNobutton />
-        <div className="
-            w-full max-w-[768px] h-[646px] mx-auto mt-[57px]
-            p-[45px 24px] text-left
-            flex flex-col items-center
-           "
-        >
-         <div className="w-[320px] md:w-[720px]">
-            <div className="w-[320px] md:w-[720px]">    
-                <div className="mb-[12px] text-gray-900 text-24-bold">To.</div>
-                <Input />
-            </div>
+  return (
+    <>
+      <HeaderNobutton />
+      <div
+        className="
+          w-full max-w-[768px]
+          mx-auto mt-[57px]
+          px-[24px] py-[45px]
+          text-left
+          flex flex-col items-center
+          h-[646px]
+        "
+      >
+        <div className="w-full max-w-[720px]">
 
-            <div className="w-[320px] md:w-[720px] mt-[50px] mb-[24px] flex flex-col items-start">
-                <div className="text-gray-900 text-24-bold">배경화면을 선택해 주세요.</div>
-                <div className="mb-[24px] text-gray-500 text-16-regular">컬러를 선택하거나, 이미지를 선택할 수 있습니다.</div>
-            </div>
-            
-            <div className="w-[320px] md:w-[720px] mb-[45px] flex flex-col items-start">
-                <ToggleButton />
-            </div>
+          <div className="w-full max-[360px]:w-[320px]">
+            <div className="mb-[12px] text-gray-900 text-24-bold">To.</div>
+            <Input />
+          </div>
 
-            <div className="w-[320px] md:w-[720px] mb-[45px] flex flex-col items-start">
-                <Option />
+          <div className="w-full max-[360px]:w-[320px] mt-[50px] mb-[24px] flex flex-col items-start">
+            <div className="text-gray-900 text-24-bold">
+              배경화면을 선택해 주세요.
             </div>
-         </div>
-            <div className="py-[24px] px-[20px] md:p-[24px] flex justify-center items-center">
-                <PrimaryMain />
+            <div className="mb-[24px] text-gray-500 text-16-regular">
+              컬러를 선택하거나, 이미지를 선택할 수 있습니다.
             </div>
+          </div>
+
+
+          <div className="w-[168px] max-[360px]:w-[320px] mb-[45px] flex flex-col items-start">
+            <ToggleButton />
+          </div>
+
+          <div className="w-full mb-[45px] flex flex-col items-center">
+            <Option />
+          </div>
         </div>
-      </>
-    );
+
+  
+        <div className="w-full max-[360px]:w-[320px] h-[56px] py-[24px] flex justify-center items-center">
+          <PrimaryMain />
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default CreatePostPage;
