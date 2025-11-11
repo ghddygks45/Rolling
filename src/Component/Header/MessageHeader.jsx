@@ -1,15 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import sharingIcon from "../../img/share-24.svg";
 import { ReactComponent as PlusIcon } from "../../img/add-24.svg";
 import { ReactComponent as ArrowIcon } from "../../img/arrow_down.svg";
 import EmojiPicker from "emoji-picker-react";
+import { Link } from "react-router-dom";
 
-function MessageHeader() {
-  const [reactions, setReactions] = useState([]);
+function MessageHeader({
+  recipient,
+  messageCount = 0,
+  topAvatars = [],
+  reactions: initialReactionsProp,
+  onShare,
+  onAddReaction
+}) {
+  const memoInitialReactions = useMemo(
+    () => (Array.isArray(initialReactionsProp) ? initialReactionsProp : []),
+    [initialReactionsProp]
+  );
+
+  const [reactions, setReactions] = useState(memoInitialReactions);
   const [showEmojiMenu, setShowEmojiMenu] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [animatedId, setAnimatedId] = useState(null); // 애니메이션 추적용
+
+  useEffect(() => {
+    setReactions(memoInitialReactions);
+  }, [memoInitialReactions]);
 
   const sortedReactions = [...reactions].sort((a, b) => b.count - a.count);
 
@@ -35,6 +52,10 @@ function MessageHeader() {
       return updated;
     });
 
+    if (typeof onAddReaction === 'function') {
+      onAddReaction(selectedEmoji);
+    }
+
     // 애니메이션 트리거 (1초간 강조)
     const target = reactions.find((r) => r.emoji === selectedEmoji);
     setAnimatedId(target ? target.id : Date.now());
@@ -50,7 +71,11 @@ function MessageHeader() {
   };
 
   const toggleShareMenu = () => {
-    setShowShareMenu((prev) => !prev);
+    const next = !showShareMenu;
+    setShowShareMenu(next);
+    if (typeof onShare === 'function' && next) {
+      onShare();
+    }
   };
 
   const toggleEmojiPicker = () => {
@@ -60,12 +85,12 @@ function MessageHeader() {
 
   const shareButtonClasses = `
         flex items-center justify-center 
-        border border-gray-300 w-[56px] h-[36px] rounded-md 
-        ${showShareMenu ? "border-gray-500" : "bg-white hover:bg-gray-100"} 
+        border border-gray-300 w-[56px] h-[36px] rounded-[6px] bg-white transition
+        ${showShareMenu ? "border-gray-500" : "hover:bg-gray-100"} 
     `;
 
   const plusButtonClasses = `
-        flex items-center justify-center gap-1 border border-gray-300 text-gray-900 rounded-md 
+        flex items-center justify-center gap-1 border border-gray-300 text-gray-900 rounded-[6px]
         w-[88px] h-[36px] transition
         ${
           showEmojiPicker
@@ -74,118 +99,144 @@ function MessageHeader() {
         }
     `;
 
+  const displayName = recipient?.name ? `To. ${recipient.name}` : 'To. 이름 없는 대상';
+  const totalWriters = messageCount ?? 0;
+  const visibleAvatars = useMemo(() => topAvatars.slice(0, 3), [topAvatars]);
+  const hiddenCount = Math.max(totalWriters - visibleAvatars.length, 0);
+
   return (
     <div className="border-b border-gray-200">
-      <div className="flex items-center justify-between w-[1200px] h-[68px] bg-white relative mx-auto">
-        {/* 왼쪽: 수신자 */}
-        <div className="text-gray-800 text-28-bold">To. Ashley Kim</div>
+      <div className="flex items-center justify-center w-full bg-white">
+        <div className="flex items-center justify-between w-full max-w-[1200px] px-6 h-[68px]">
+          {/* 왼쪽: 수신자 */}
+          <Link
+            to="/list"
+            className="text-gray-800 text-28-bold truncate pr-6 hover:underline"
+            title={displayName}
+          >
+            {displayName}
+          </Link>
 
-        {/* 오른쪽 */}
-        <div className="flex items-center gap-3 relative">
-          {/* 작성자 수, 아바타 등 */}
-          <div className="flex items-center gap-2">
-            <div className="flex items-center -space-x-[12px]">
-              {[...Array(3)].map((_, i) => (
-                <img
-                  key={i}
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3sNaglv_WIugAApob8DnWx3ePYnc33k_vCwJ-0b6NcJF2JdWPR4Ta2-Jr5BbZxrt0-5BBbZJfhMraFULt8VemDX9DiSnTi4LC665QBIhHCg&s=10"
-                  alt="avatar"
-                  className="w-[28px] h-[28px] rounded-full border-2 border-white"
-                />
-              ))}
-              <div className="w-[28px] h-[28px] bg-gray-300 rounded-full flex items-center justify-center text-xs text-gray-700 border-2 border-white">
-                +6
-              </div>
-            </div>
-            <span className="ml-2 text-18-regular">
-              <span className="text-18-bold">23명</span>이 작성했어요!
-            </span>
-            <span className="w-[1px] h-[28px] bg-gray-200 mx-4"></span>
-          </div>
-
-          {/* 이모지 표시 + 화살표 */}
-          {sortedReactions.length > 0 && (
-            <div className="relative">
-              <div className="flex items-center gap-1">
-                <div className="flex items-center gap-2">
-                  {sortedReactions.slice(0, 3).map((reaction) => (
-                    <button
-                      key={reaction.id}
-                      onClick={() => handleEmojiSelect(reaction.emoji)}
-                      className={`flex items-center justify-center gap-1 bg-black bg-opacity-[54%] text-white rounded-full px-[12px] py-[6px] transition-transform duration-150 ${
-                        animatedId === reaction.id ? "emoji-animate" : ""
-                      }`}
-                    >
-                      {reaction.emoji}&nbsp;{reaction.count}
-                    </button>
+          {/* 오른쪽 */}
+          <div className="flex items-center gap-[28px] relative">
+            {/* 작성자 수, 아바타 등 */}
+            <div className="flex items-center gap-[11px]">
+              <div className="flex items-center">
+                <div className="flex items-center -space-x-[12px]">
+                  {visibleAvatars.map((avatar, i) => (
+                    <img
+                      key={`${avatar.src}-${i}`}
+                      src={avatar.src}
+                      alt={avatar.alt || `avatar-${i + 1}`}
+                      className="w-[28px] h-[28px] rounded-full border-[1.5px] border-white object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://placehold.co/28x28';
+                      }}
+                    />
                   ))}
                 </div>
-
-                {sortedReactions.length >= 3 && (
-                  <button onClick={toggleEmojiMenu} className="mx-2 transition">
-                    <ArrowIcon
-                      className={`transition-transform duration-200 ${
-                        showEmojiMenu ? "rotate-180" : "rotate-0"
-                      }`}
-                    />
-                  </button>
+                {hiddenCount > 0 && (
+                  <div className="ml-2 w-[28px] h-[28px] bg-white border border-[#E3E3E3] rounded-full flex items-center justify-center text-xs text-[#484848]">
+                    +{hiddenCount}
+                  </div>
                 )}
               </div>
+              <span className="text-18-regular text-gray-900">
+                <span className="text-18-bold">{totalWriters}</span>명이 작성했어요!
+              </span>
+              <span className="w-px h-[28px] bg-[#EEEEEE]"></span>
+            </div>
 
-              {showEmojiMenu && sortedReactions.length >= 3 && (
-                <div className="absolute right-5 mt-2 w-80 bg-white rounded-xl shadow-lg p-[24px] grid grid-cols-4 gap-2 justify-items-center z-10">
-                  {reactions.map((reaction) => (
+            {/* 이모지 표시 + 화살표 */}
+            <div className="flex items-center gap-2 min-w-[236px] justify-end">
+              {sortedReactions.length > 0 && (
+                <div className="relative flex items-center gap-2">
+                  <div className="flex items-center gap-2">
+                    {sortedReactions.slice(0, 3).map((reaction) => (
+                      <button
+                        key={reaction.id}
+                        onClick={() => handleEmojiSelect(reaction.emoji)}
+                        className={`flex items-center justify-center gap-1 bg-black bg-opacity-[54%] text-white rounded-full px-[12px] py-[6px] transition-transform duration-150 ${
+                          animatedId === reaction.id ? "emoji-animate" : ""
+                        }`}
+                      >
+                        {reaction.emoji}&nbsp;{reaction.count}
+                      </button>
+                    ))}
+                  </div>
+
+                  {sortedReactions.length >= 3 && (
                     <button
-                      key={reaction.id}
-                      onClick={() => handleEmojiSelect(reaction.emoji)}
-                      className={`flex flex-row items-center justify-center bg-black bg-opacity-[54%] text-white rounded-full px-[12px] py-[6px] text-16-regular w-full transition-transform duration-150 ${
-                        animatedId === reaction.id ? "emoji-animate" : ""
-                      }`}
+                      onClick={toggleEmojiMenu}
+                      className="flex items-center justify-center w-[36px] h-[36px] transition"
                     >
-                      {reaction.emoji}&nbsp;{reaction.count}
+                      <ArrowIcon
+                        className={`transition-transform duration-200 ${
+                          showEmojiMenu ? "rotate-180" : "rotate-0"
+                        }`}
+                      />
                     </button>
-                  ))}
+                  )}
+
+                  {showEmojiMenu && sortedReactions.length >= 3 && (
+                    <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg p-[24px] grid grid-cols-4 gap-2 justify-items-center z-10">
+                      {reactions.map((reaction) => (
+                        <button
+                          key={reaction.id}
+                          onClick={() => handleEmojiSelect(reaction.emoji)}
+                          className={`flex flex-row items-center justify-center bg-black bg-opacity-[54%] text-white rounded-full px-[12px] py-[6px] text-16-regular w-full transition-transform duration-150 ${
+                            animatedId === reaction.id ? "emoji-animate" : ""
+                          }`}
+                        >
+                          {reaction.emoji}&nbsp;{reaction.count}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
-          )}
 
-          {/* 이모지 추가 버튼 */}
-          <div className="relative z-20">
-            <button onClick={toggleEmojiPicker} className={plusButtonClasses}>
-              <PlusIcon />
-              추가
-            </button>
+            <span className="w-px h-[28px] bg-[#EEEEEE]"></span>
 
-            {showEmojiPicker && (
-              <div className="absolute top-[calc(100%+8px)] left-1/2 transform -translate-x-1/2 z-30">
-                <EmojiPicker onEmojiClick={handleEmojiSelect} />
-              </div>
-            )}
-          </div>
-
-          <span className="w-[1px] h-[28px] bg-gray-200 mx-2"></span>
-
-          {/* 공유 버튼 */}
-          <div className="relative">
-            <button
-              onClick={toggleShareMenu}
-              className={shareButtonClasses}
-              aria-expanded={showShareMenu}
-            >
-              <img src={sharingIcon} alt="공유" />
-            </button>
-
-            {showShareMenu && (
-              <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md py-[10px] w-[140px] h-[120px] z-10 text-gray-900 border border-gray-300 text-16-regular">
-                <button className="text-left px-4 py-2 hover:bg-gray-100 w-[138px] h-[50px]">
-                  카카오톡 공유
+            {/* 이모지 추가 & 공유 버튼 */}
+            <div className="flex items-center gap-[13px] min-w-[171px] justify-end">
+              <div className="relative z-20">
+                <button onClick={toggleEmojiPicker} className={plusButtonClasses}>
+                  <PlusIcon />
+                  추가
                 </button>
-                <button className="text-left px-4 py-2 hover:bg-gray-100 w-[138px] h-[50px]">
-                  URL 복사
-                </button>
+
+                {showEmojiPicker && (
+                  <div className="absolute top-[calc(100%+8px)] left-1/2 transform -translate-x-1/2 z-30">
+                    <EmojiPicker onEmojiClick={handleEmojiSelect} />
+                  </div>
+                )}
               </div>
-            )}
+
+              <span className="w-px h-[28px] bg-[#EEEEEE]"></span>
+
+              <div className="relative">
+                <button
+                  onClick={toggleShareMenu}
+                  className={shareButtonClasses}
+                  aria-expanded={showShareMenu}
+                >
+                  <img src={sharingIcon} alt="공유" />
+                </button>
+
+                {showShareMenu && (
+                  <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md py-[10px] w-[140px] h-[120px] z-10 text-gray-900 border border-gray-300 text-16-regular">
+                    <button className="text-left px-4 py-2 hover:bg-gray-100 w-full h-[50px]">
+                      카카오톡 공유
+                    </button>
+                    <button className="text-left px-4 py-2 hover:bg-gray-100 w-full h-[50px]">
+                      URL 복사
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

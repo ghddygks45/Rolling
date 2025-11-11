@@ -8,28 +8,27 @@ import RightArrow from '../Component/Button/Right-arrow'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import styles from './ListPage.module.css'
+import { fetchRecipients } from '../api/recipients'
 
 const CARDS_PER_VIEW = 4
 const CARDS_PER_GROUP = 2
 const CARD_GAP = 20
 
-const POPULAR_CARDS = Array.from({ length: 12 }, (_, index) => ({ id: index }))
-const RECENT_CARDS = Array.from({ length: 12 }, (_, index) => ({ id: index + 100 }))
-
-function NavigableCard({ cardId }) {
+function NavigableCard({ card }) {
   const navigate = useNavigate()
 
   const handleNavigate = useCallback(() => {
+    const cardId = card?.id
     if (cardId === undefined || cardId === null) return
     navigate(`/post/${cardId}`)
-  }, [cardId, navigate])
+  }, [card, navigate])
 
   return (
     <div
       onClick={handleNavigate}
       className="cursor-pointer"
     >
-      <CardList />
+      <CardList recipient={card} />
     </div>
   )
 }
@@ -48,23 +47,25 @@ function RollingSwiper({ cards, sliderKey, viewportWidth }) {
   const swiperRef = useRef(null)
   const [activeIndex, setActiveIndex] = useState(0)
 
+  const safeCards = useMemo(() => (Array.isArray(cards) ? cards : []), [cards])
+
   const isMobile = viewportWidth <= 360
   const isDesktop = viewportWidth > 1024
   const visibleCount = isDesktop ? CARDS_PER_VIEW : 1
-  const totalSlides = cards.length
+  const totalSlides = safeCards.length
   const maxStartIndex = Math.max(totalSlides - visibleCount, 0)
   const showNavigation = isDesktop && totalSlides > CARDS_PER_VIEW
   const cardGap = isMobile ? 12 : CARD_GAP
 
   const displayCards = useMemo(() => {
-    if (!showNavigation) return cards
-    if (totalSlides >= CARDS_PER_VIEW) return cards
+    if (!showNavigation) return safeCards
+    if (totalSlides >= CARDS_PER_VIEW) return safeCards
     const placeholders = Array.from({ length: CARDS_PER_VIEW - totalSlides }, (_, index) => ({
       id: `placeholder-${sliderKey}-${index}`,
       placeholder: true
     }))
-    return [...cards, ...placeholders]
-  }, [cards, showNavigation, sliderKey, totalSlides])
+    return [...safeCards, ...placeholders]
+  }, [safeCards, showNavigation, sliderKey, totalSlides])
 
   useEffect(() => {
     setActiveIndex(0)
@@ -137,7 +138,7 @@ function RollingSwiper({ cards, sliderKey, viewportWidth }) {
             key={`${sliderKey}-${card.id ?? index}`}
             className={`flex justify-center ${styles.swiperSlide}`}
           >
-            {card.placeholder ? <PlaceholderCard index={index} /> : <NavigableCard cardId={card.id} />}
+            {card.placeholder ? <PlaceholderCard index={index} /> : <NavigableCard card={card} />}
           </SwiperSlide>
         ))}
       </Swiper>
@@ -168,6 +169,10 @@ function ListPage() {
     const measured = window.innerWidth || document.documentElement.clientWidth || 1920
     return Math.round(measured)
   })
+  const [popularCards, setPopularCards] = useState([])
+  const [recentCards, setRecentCards] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined
@@ -179,6 +184,35 @@ function ListPage() {
     window.addEventListener('resize', handleResize)
 
     return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  useEffect(() => {
+    let active = true
+
+    const loadRecipients = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const data = await fetchRecipients({ limit: 12 })
+        if (!active) return
+        const results = Array.isArray(data?.results) ? data.results : []
+        setPopularCards(results)
+        setRecentCards([...results].reverse())
+      } catch (err) {
+        if (!active) return
+        setError(err)
+        setPopularCards([])
+        setRecentCards([])
+      } finally {
+        if (active) setLoading(false)
+      }
+    }
+
+    loadRecipients()
+
+    return () => {
+      active = false
+    }
   }, [])
 
   return (
@@ -194,20 +228,32 @@ function ListPage() {
           <div className={`flex items-center justify-between ${styles.sectionHeader}`}>
             <h2 className={`text-24-bold text-gray-900 ${styles.sectionTitle}`}>인기 롤링 페이퍼 🔥</h2>
             </div>
-          <RollingSwiper cards={POPULAR_CARDS} sliderKey="popular" viewportWidth={viewportWidth} />
+          {loading ? (
+            <p className="text-14-regular text-gray-500">데이터를 불러오는 중입니다...</p>
+          ) : error ? (
+            <p className="text-14-regular text-red-500">데이터를 불러오지 못했습니다.</p>
+          ) : (
+            <RollingSwiper cards={popularCards} sliderKey="popular" viewportWidth={viewportWidth} />
+          )}
         </section>
 
         <section className={`w-full max-w-[1160px] flex flex-col gap-4 ${styles.section}`}>
           <div className={`flex items-center justify-between ${styles.sectionHeader}`}>
             <h2 className={`text-24-bold text-gray-900 ${styles.sectionTitle}`}>최근에 만든 롤링 페이퍼 ⭐️️</h2>
             </div>
-          <RollingSwiper cards={RECENT_CARDS} sliderKey="recent" viewportWidth={viewportWidth} />
+          {loading ? (
+            <p className="text-14-regular text-gray-500">데이터를 불러오는 중입니다...</p>
+          ) : error ? (
+            <p className="text-14-regular text-red-500">데이터를 불러오지 못했습니다.</p>
+          ) : (
+            <RollingSwiper cards={recentCards} sliderKey="recent" viewportWidth={viewportWidth} />
+          )}
         </section>
 
         <div className={`w-full max-w-[1201px] flex flex-col items-center mt-[-8px] ${styles.bottomShell}`}>
-            <div
+          <div
             className={`relative flex justify-center [&>button]:w-[280px] [&>button]:h-[56px] [&>button]:bg-[#9935FF] [&>button]:rounded-[12px] [&>button]:px-6 [&>button]:py-[14px] [&>button]:gap-[10px] [&>button]:font-[700] [&>button]:text-[18px] [&>button]:leading-[28px] [&>button]:tracking-[-0.01em] [&>button]:shadow-[0_4px_10px_rgba(153,53,255,0.2)] ${styles.bottomButtonWrap}`}
-            >
+          >
             <PrimaryMain text="나도 만들어보기" to="/post" />
             </div>
         </div>
