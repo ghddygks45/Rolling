@@ -11,11 +11,11 @@ function CreatePostPage() {
         <HeaderNobutton />
         <div className="
             w-full max-w-[768px] h-[646px] mx-auto mt-[57px]
-            p-[45px 24px] mb-[312px] text-left
+            p-[45px 24px] text-left
             flex flex-col items-center
            "
         >
-         <div className="w-[320px] md:w-[720px] flex flex-col items-start">
+         <div className="w-[320px] md:w-[720px]">
             <div className="w-[320px] md:w-[720px]">    
                 <div className="mb-[12px] text-gray-900 text-24-bold">To.</div>
                 <Input />
@@ -43,5 +43,3 @@ function CreatePostPage() {
 }
 
 export default CreatePostPage;
-
-// 만들면서 느낀 개선점: 헤더 부분 반응형으로 만들어야할 듯?
