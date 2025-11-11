@@ -168,9 +168,24 @@ function MessageHeader() {
   `;
 
   return (
-    <div className="border-b border-gray-200">
+    <div className="border-b border-gray-200 relative mx-auto">
+      {/* Toast */}
+      <Toast
+        isOpen={toastOpen}
+        onClose={() => setToastOpen(false)}
+        message={toastMessage}
+        type={toastType}
+        duration={2000}
+      />
+
+      {/* 팝업 */}
+      {popup.visible && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-80 text-white text-sm px-5 py-3 rounded-lg shadow-lg z-50 animate-fadeIn">
+          {popup.message}
+        </div>
+      )}
+
       <div className="flex items-center justify-between w-[1200px] h-[68px] bg-white relative mx-auto">
-        {/* 왼쪽: 수신자 */}
         <div className="text-gray-800 text-28-bold">To. Ashley Kim</div>
 
         <div className="flex items-center gap-3 relative">
