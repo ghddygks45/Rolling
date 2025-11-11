@@ -1,13 +1,12 @@
 import "./App.css";
-// import OwnerPage from "./RollingPage/OwnerPage";
-import Card from "./Component/Card/Card";
-import DeleteButton from "./Component/Button/Delete-button"
+import OwnerPage from "./RollingPage/OwnerPage";
+// import Card from "./Component/Card/Card";
 
 function App() {
   return (
     <>
-      {/* <OwnerPage/> */}
-      <Card/>
+      <OwnerPage/>
+      {/* <Card/> */}
     </>
   );
 }
