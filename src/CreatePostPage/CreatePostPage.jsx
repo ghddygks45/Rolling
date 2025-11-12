@@ -30,7 +30,7 @@ function CreatePostPage() {
             <div className="text-gray-900 text-24-bold">
               배경화면을 선택해 주세요.
             </div>
-            <div className="mb-[24px] text-gray-500 text-16-regular">
+            <div className="mb-[24px] text-gray-500 text-16-regular max-sm:mb-0">
               컬러를 선택하거나, 이미지를 선택할 수 있습니다.
             </div>
           </div>
@@ -40,13 +40,13 @@ function CreatePostPage() {
             <ToggleButton />
           </div>
 
-          <div className="w-full mb-[45px] flex flex-col items-center">
+          <div className="w-full mb-[48px] flex flex-col items-center">
             <Option />
           </div>
         </div>
 
   
-        <div className="w-full max-[360px]:w-[320px] h-[56px] py-[24px] flex justify-center items-center">
+        <div className="w-full h-full py-[24px] flex justify-center items-center md:pb-6">
           <PrimaryMain />
         </div>
       </div>

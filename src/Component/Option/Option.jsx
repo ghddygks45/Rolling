@@ -28,7 +28,7 @@ function Option() {
 
   return (
     // 전체 컨테이너
-    <div className="w-full max-[360px]:w-[320px] grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div className="w-full max-[360px]:w-[320px] grid grid-cols-2 sm:grid-cols-4 gap-6">
       
       {boxData.map((box) => (
         <div 

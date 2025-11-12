@@ -80,6 +80,9 @@ module.exports = {
       fontFamily: {
         sans: ["Pretendard", "ui-sans-serif", "system-ui", "sans-serif"],
       },
+      Screen:{
+        'max-xs' : {'max':'360px'},
+      }
     },
   },
   plugins: [
