@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../Component/Header/Header";
 import MessageHeader from "../Component/Header/MessageHeader";
 import DeleteButton from "../Component/Button/Delete-button";
 import Modal from "../Component/Modal/Modal";
+import axios from "axios";
 
 // 🚨 정적인 메시지 데이터 (ID 추적 및 기타 정보 추가)
 const STATIC_MESSAGES = Array.from({ length: 9 }).map((_, index) => ({
@@ -27,6 +28,21 @@ function OwnerPage() {
   // === 메시지 삭제 확인 모달 상태 추가 (개별 메시지 삭제) ===
   const [isMessageDeleteModalOpen, setIsMessageDeleteModalOpen] = useState(false);
   const [messageToDeleteId, setMessageToDeleteId] = useState(null); // 삭제할 메시지 ID 추적
+
+  const [products, setProducts] = useState([]);
+
+  // API 연동하기
+  useEffect(() => {
+    const data = async () => {
+      try {
+        const res = await axios.get("https://rolling-api.vercel.app/20-4/recipients/1/messages");
+        setProducts(res.data);
+      } catch (error) {
+        console.error("");
+      }
+    };
+    data();
+  }, []);
 
   // 카드 클릭 시 모달 열기 핸들러
   const handleCardClick = (message) => {
@@ -142,6 +158,8 @@ function OwnerPage() {
               </div>
 
               {/* 카드 목록 */}
+              <div>데이터입니다.{products}</div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[24px] mt-[28px] relative z-10">
                 {STATIC_MESSAGES.map((item) => (
                   <div

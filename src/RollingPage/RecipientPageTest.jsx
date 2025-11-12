@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../Component/Header/Header";
 import MessageHeader from "../Component/Header/MessageHeader";
 import DeleteButton from "../Component/Button/Delete-button";
 import Modal from "../Component/Modal/Modal";
+import ModalTest from "../Component/Modal/ModalTest";
+import axios from "axios";
+import UserCard, { defaultMessage } from "../Component/Card/UserCard";
+import { useParams } from "react-router-dom";
 
 // 🚨 정적인 메시지 데이터 (ID 추적 및 기타 정보 추가)
 const STATIC_MESSAGES = Array.from({ length: 9 }).map((_, index) => ({
@@ -17,27 +21,66 @@ const STATIC_MESSAGES = Array.from({ length: 9 }).map((_, index) => ({
 }));
 
 function OwnerPage() {
-  // === 메시지 상세보기 모달 상태 ===
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedMessage, setSelectedMessage] = useState(null);
+  // const [selectedMessage, setSelectedMessage] = useState(null);
 
   // === 페이지 삭제 확인 모달 상태 (전체 페이지 삭제) ===
   const [isPageDeleteModalOpen, setIsPageDeleteModalOpen] = useState(false);
 
   // === 메시지 삭제 확인 모달 상태 추가 (개별 메시지 삭제) ===
   const [isMessageDeleteModalOpen, setIsMessageDeleteModalOpen] = useState(false);
-  const [messageToDeleteId, setMessageToDeleteId] = useState(null); // 삭제할 메시지 ID 추적
+  const [messageToDeleteId, setMessageToDeleteId] = useState(null); // 삭제할 메시지
+
+  const { id } = useParams(); // URL에 있는 id 값 가져오기
+  const [messages, setMessages] = useState([]);
+  const defaultMessages = Array(6).fill(defaultMessage);
+
+  // 카드데이터 뿌리기: UserCard.jsx
+  useEffect(() => {
+    const dataMessages = async () => {
+      try {
+        const res = await axios.get(
+          `https://rolling-api.vercel.app/20-4/recipients/${id}/messages`
+        );
+        setMessages(res.data.results || []);
+      } catch (error) {
+        alert(`실패입니다. 에러코드: ${error}`);
+      }
+    };
+
+    dataMessages();
+  }, []);
+
+  // 랜더링 데이터 선택: 없으면 defaultMessages데이터 표시
+  const messegesToRender = messages && messages.length > 0 ? messages : defaultMessages;
+
+  // 모달에 데이터 가져오기: Modal.jsx
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   // 카드 클릭 시 모달 열기 핸들러
-  const handleCardClick = (message) => {
-    setSelectedMessage(message);
+  const handleCardClick = (id) => {
+    setSelectedId(id);
     setIsOpen(true);
+    console.log(id);
   };
+
+  // selectedMessage: 아이디 값이 같을 경우 그 메세지 객체를 반환받음
+  const selectedMessage = messegesToRender.find((msg, index) => {
+    const messageId = msg.id ?? index;
+    return messageId === selectedId;
+  });
+
+  // useEffect(() => {
+  //   console.log("useEffect실행");
+  //   if (selectedId !== null) {
+  //     console.log("🟢 업데이트된 selectedId:", selectedId);
+  //   }
+  // }, [selectedId]);
 
   // 메시지 상세 모달 닫기 핸들러
   const handleCloseModal = () => {
     setIsOpen(false);
-    setSelectedMessage(null);
+    // setSelectedMessage(null);
   };
 
   // --- 전체 페이지 삭제 로직 ---
@@ -143,51 +186,12 @@ function OwnerPage() {
 
               {/* 카드 목록 */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[24px] mt-[28px] relative z-10">
-                {STATIC_MESSAGES.map((item) => (
-                  <div
-                    key={item.id}
-                    onClick={() => handleCardClick(item)}
-                    className="bg-white rounded-xl shadow-md p-6 text-gray-600 flex flex-col justify-between cursor-pointer hover:shadow-lg transition h-[280px]"
-                  >
-                    {/* 🗑️ 상단: 프로필, 이름, 태그, 휴지통 */}
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="flex items-center">
-                        {/* 프로필 이미지 */}
-                        <img
-                          src={item.profileImageURL}
-                          alt={item.senderName}
-                          className="w-10 h-10 rounded-full mr-3 object-cover"
-                        />
-                        {/* From. 이름 및 태그 */}
-                        <div>
-                          <div className="font-bold text-gray-900 text-lg">
-                            From. {item.senderName}
-                          </div>
-                          <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">
-                            {item.relationship}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* 개별 메시지 삭제 휴지통 아이콘 */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation(); // 카드 본문 클릭 방지
-                          handleOpenMessageDeleteModal(item.id); // 메시지 삭제 모달 열기
-                        }}
-                        className="p-2 text-gray-400 hover:text-gray-600 transition"
-                        aria-label="메시지 삭제"
-                      >
-                        🗑️
-                      </button>
-                    </div>
-
-                    {/* 메시지 내용 */}
-                    <p className="text-gray-800 line-clamp-4 flex-1">{item.content}</p>
-
-                    {/* 하단: 날짜 */}
-                    <div className="mt-4 text-xs text-gray-500">{item.date}</div>
-                  </div>
+                {messegesToRender.map((message, idx) => (
+                  <UserCard
+                    key={message.id ?? idx}
+                    message={message}
+                    onClick={() => handleCardClick(message.id ?? idx)}
+                  />
                 ))}
               </div>
             </div>
@@ -195,8 +199,22 @@ function OwnerPage() {
         </div>
       </div>
 
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/70 z-[100] flex items-center justify-center"
+          onClick={handleCloseModal}
+        >
+          <ModalTest
+            onClick={(e) => e.stopPropagation()}
+            isOpen={isOpen}
+            onClose={handleCloseModal}
+            message={selectedMessage}
+          />
+        </div>
+      )}
+
       {/* 메시지 상세 모달 렌더링 */}
-      {isOpen && selectedMessage && (
+      {/* {isOpen && selectedMessage && (
         <div
           className="fixed inset-0 bg-black/70 z-[100] flex items-center justify-center"
           onClick={handleCloseModal}
@@ -209,7 +227,7 @@ function OwnerPage() {
             content={selectedMessage.content}
           />
         </div>
-      )}
+      )} */}
 
       {/* 페이지 삭제 확인 모달 렌더링 */}
       {isPageDeleteModalOpen && (
