@@ -47,7 +47,7 @@ function OwnerPage({ recipientId }) {
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
 
-  // ⭐ 이미지 or 색상 통합 값
+  // 이미지 or 색상 통합 값
   const [backgroundValue, setBackgroundValue] = useState("");
 
   const [isOpen, setIsOpen] = useState(false);
@@ -93,7 +93,7 @@ function OwnerPage({ recipientId }) {
 
       setRecipient(recipientData || null);
 
-      // ⭐ 배경 (이미지 우선 → 없으면 색상)
+      // 배경 (이미지 우선 → 없으면 색상)
       if (recipientData) {
         if (recipientData.backgroundImageURL || recipientData.backgroundImage) {
           setBackgroundValue(
@@ -227,57 +227,50 @@ function OwnerPage({ recipientId }) {
       <div
         className="owner-page-scrollbar-hide"
         style={{
-          background: backgroundValue
-            ? backgroundValue.startsWith("http") ||
-              backgroundValue.startsWith("/")
-              ? `url(${backgroundValue})`
-              : backgroundValue // 색상
-            : undefined,
-
-          // 이미지일 때 = contain (확대 안 됨)
-          backgroundSize:
-            backgroundValue?.startsWith("http") ||
-            backgroundValue?.startsWith("/")
-              ? "contain"
-              : "cover",
-
-          backgroundRepeat:
-            backgroundValue?.startsWith("http") ||
-            backgroundValue?.startsWith("/")
-              ? "no-repeat"
-              : undefined,
-
-          backgroundPosition: "center",
+          ...(backgroundValue?.startsWith("http") ||
+          backgroundValue?.startsWith("/")
+            ? {
+                backgroundImage: `url(${backgroundValue})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center top",
+                backgroundRepeat: "no-repeat",
+              }
+            : {
+                backgroundColor: backgroundValue,
+              }),
         }}
       >
-        
-        <div className="flex flex-col min-h-screen">
-          {/* 헤더 */}
-          <div className="fixed top-0 left-0 w-full bg-white shadow-sm z-30">
+        {/* 헤더 */}
+        <div className="fixed top-0 left-0 w-full shadow-sm z-30 bg-white">
+          <div className="max-w-[1200px] mx-auto">
             {screenMode === "mobile" ? (
               <MobileHeader hideCreateButton />
             ) : (
               <HeaderNobutton />
             )}
 
-            <div className="mx-auto">
-              <MessageHeader
-                recipient={recipient}
-                messageCount={totalMessageCount}
-                topAvatars={topAvatars}
-                reactions={reactions}
-                onAddReaction={handleAddReaction}
-                hideAvatars={screenMode === "tablet"}
-              />
-            </div>
+            {screenMode !== "mobile" && (
+              <div className="mx-auto">
+                <MessageHeader
+                  recipient={recipient}
+                  messageCount={totalMessageCount}
+                  topAvatars={topAvatars}
+                  reactions={reactions}
+                  onAddReaction={handleAddReaction}
+                  hideAvatars={screenMode === "tablet"}
+                />
+              </div>
+            )}
           </div>
+        </div>
 
+        <div className="flex flex-col min-h-screen">
           {/* 카드 영역 */}
           <div className="flex-1 w-full pt-[102px] sm:pt-[147px] lg:pt-[171px] pb-10 relative">
-            <div className="mx-auto max-w-[1200px] px-[24px] relative">
+            <div className="mx-auto max-w-[1200px] relative">
               {/* PC 삭제 버튼 */}
               {screenMode === "pc" && (
-                <div className="mx-auto max-w-[1200px] w-full flex justify-end mb-[16px]">
+                <div className="w-full max-w-[1200px] mx-auto flex justify-end px-[24px] mb-[16px]">
                   <button
                     onClick={handleOpenPageDeleteModal}
                     disabled={deleting}
@@ -305,8 +298,9 @@ function OwnerPage({ recipientId }) {
                 </div>
               )}
 
+              {/* 카드 리스트 */}
               {hasMessages ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[24px] mt-[28px] relative z-10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[24px] mt-[28px] relative z-10 px-[24px]">
                   {messages.map((item) => (
                     <Card
                       key={item.id}
@@ -334,9 +328,10 @@ function OwnerPage({ recipientId }) {
               )}
             </div>
           </div>
+
           {/* 모바일 삭제 버튼 */}
           {screenMode !== "pc" && (
-            <div className="fixed bottom-0 left-0 right-0 z-40 p-4 pt-0">
+            <div className="fixed bottom-0 left-0 right-0 z-40 px-[24px] pt-0">
               <div className="mx-auto max-w-[1200px] px-0">
                 <button
                   onClick={handleOpenPageDeleteModal}
@@ -358,14 +353,15 @@ function OwnerPage({ recipientId }) {
           onClick={handleCloseModal}
         >
           <Modal
-            onClick={(e) => e.stopPropagation()}
             isOpen={isOpen}
             onClose={handleCloseModal}
-            senderName={selectedMessage.senderName}
-            content={selectedMessage.content}
-            profileImage={selectedMessage.profileImageURL}
-            relationship={selectedMessage.relationship}
-            date={selectedMessage.date}
+            message={{
+              sender: selectedMessage.senderName,
+              profileImageURL: selectedMessage.profileImageURL,
+              relationship: selectedMessage.relationship,
+              createdAt: selectedMessage.date,
+              content: selectedMessage.content,
+            }}
           />
         </div>
       )}
