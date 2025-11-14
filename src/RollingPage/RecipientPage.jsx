@@ -13,20 +13,20 @@ function RecipientPage() {
   const defaultMessages = Array(6).fill(defaultMessage);
 
   // 카드데이터 뿌리기: UserCard.jsx: 추후 확인 필요(현재 defaultMessages)
-  // useEffect(() => {
-  //   const dataMessages = async () => {
-  //     try {
-  //       const res = await axios.get(
-  //         `https://rolling-api.vercel.app/20-4/recipients/${id}/messages`
-  //       );
-  //       setMessages(res.data.results || []);
-  //     } catch (error) {
-  //       alert(`실패입니다. 에러코드: ${error}`);
-  //     }
-  //   };
+  useEffect(() => {
+    const dataMessages = async () => {
+      try {
+        const res = await axios.get(
+          `https://rolling-api.vercel.app/20-4/recipients/${id}/messages`
+        );
+        setMessages(res.data.results || []);
+      } catch (error) {
+        alert(`실패입니다. 에러코드: ${error}`);
+      }
+    };
 
-  //   dataMessages();
-  // }, []);
+    dataMessages();
+  }, []);
 
   // 랜더링 데이터 선택: 없으면 defaultMessages데이터 표시
   const messegesToRender = messages && messages.length > 0 ? messages : defaultMessages;
