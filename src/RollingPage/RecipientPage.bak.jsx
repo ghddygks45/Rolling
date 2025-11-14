@@ -18,7 +18,7 @@ function RecipientPage() {
     const dataMessages = async () => {
       try {
         const res = await axios.get(
-          `https://rolling-api.vercel.app/20-4/recipients/${id}/messages`
+          `https://rolling-api.vercel.app/20-4/recipients/14995/messages/?limit=8&offset=0`
         );
         setMessages(res.data.results || []);
       } catch (error) {
@@ -59,7 +59,7 @@ function RecipientPage() {
       try {
         // id: 14995 --> 추후 변경: ${id}
         const res = await axios.get(
-          `https://rolling-api.vercel.app/20-4/recipients/${id}/reactions/`
+          `https://rolling-api.vercel.app/20-4/recipients/14995/reactions/`
         );
         setReactions(res.data.results);
         console.log(reactions);
@@ -80,7 +80,7 @@ function RecipientPage() {
     try {
       // id: 14995 --> 추후 변경: ${id}
       const res = await axios.post(
-        `https://rolling-api.vercel.app/20-4/recipients/${id}/reactions/`,
+        `https://rolling-api.vercel.app/20-4/recipients/14995/reactions/`,
         {
           emoji: selectEmojiObj.emoji,
           type: selectEmojiObj.type,

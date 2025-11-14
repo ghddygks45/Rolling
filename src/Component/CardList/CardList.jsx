@@ -3,11 +3,12 @@ import { fetchRecipientMessages } from '../../api/messages'
 // import profile01 from './assets/profile01.svg'
 // import profile02 from './assets/profile02.svg'
 // import profile03 from './assets/profile03.svg'
-import pattern01 from '../Card_list/assets/pattern01.svg'
-import pattern02 from '../Card_list/assets/pattern02.svg'
-import pattern03 from '../Card_list/assets/pattern03.svg'
-import pattern04 from '../Card_list/assets/pattern04.svg'
+import pattern01 from '../CardList/assets/pattern01.svg'
+import pattern02 from '../CardList/assets/pattern02.svg'
+import pattern03 from '../CardList/assets/pattern03.svg'
+import pattern04 from '../CardList/assets/pattern04.svg'
 import { REACTION_ALIAS_TO_EMOJI } from '../../api/recipients'
+import styles from './CardList.module.css'
 
 const COLOR_STYLE_MAP = {
   beige: { hex: '#FFE2AD', pattern: pattern02 },
@@ -19,7 +20,7 @@ const COLOR_STYLE_MAP = {
 const DEFAULT_BACKGROUND =
   "https://mblogthumb-phinf.pstatic.net/MjAyMTAzMDVfOTYg/MDAxNjE0OTU1MTgyMzYz.ozwJXDtUw0V_Gniz6i7qgDOkNs09MX-rJdCcaw6AAeAg.DZivXhGnQDUUx7kgkRXNOEI0DEltAo6p9Jk9SDBbxRcg.JPEG.sosohan_n/IMG_3725.JPG?type=w800"
 
-function CardList({ recipient }) {
+function CardList({ recipient, isRecent }) {
 
   const [profileImageUrls, setProfileImageUrls] = useState([])
   // API에서 내려온 수신인 정보(name, messageCount 등)를 카드 UI에 반영
@@ -123,17 +124,18 @@ function CardList({ recipient }) {
   return (
       <div
         data-cardlist
-        className="
+        className={`
+          ${styles.card}
           relative overflow-hidden flex-shrink-0
-        w-[208px] h-[232px] rounded-[16px] box-border
-        pt-6 pr-5 pb-5 pl-5
-        min-[361px]:w-[275px] min-[361px]:h-[260px]
-        min-[361px]:pt-[30px] min-[361px]:pr-6 min-[361px]:pb-5 min-[361px]:pl-6
+          h-[232px] rounded-[16px] box-border
+          pt-6 pr-5 pb-5 pl-5
+          min-[361px]:h-[260px]
+          min-[361px]:pt-[30px] min-[361px]:pr-6 min-[361px]:pb-5 min-[361px]:pl-6
           border border-grayscale-500/20
           shadow-[0_2px_13px_rgba(0,0,0,0.08)]
           bg-cover bg-center
-        transition-colors duration-200
-        "
+          transition-colors duration-200
+        `}
         style={{
         ...backgroundStyle,
         color: isImageCard ? '#FFFFFF' : '#2B2B2B'
@@ -149,6 +151,13 @@ function CardList({ recipient }) {
           aria-hidden="true"
           className="absolute right-0 bottom-[-10px] pointer-events-none z-0 select-none"
         />
+      )}
+      {isRecent && (
+        <div className="absolute top-2 right-2 z-20 flex items-center justify-center">
+          <span className="text-14-bold min-[361px]:text-16-bold font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
+            NEW!
+          </span>
+        </div>
       )}
       <div
         className={`flex flex-col gap-3 relative z-[1] ${isImageCard ? 'text-white' : 'text-gray-900'}`}
@@ -225,28 +234,11 @@ function CardList({ recipient }) {
       />
       {/* 반응 아이콘들 - 있을 때만 표시, 선 위에 배치 */}
       {topReactions.length > 0 && (
-          <div
-            className="
-            flex items-end gap-1
-            max-[360px]:gap-[4px]
-            min-[361px]:gap-2
-            mt-[17px] pt-[18px]
-            max-[360px]:mt-4 max-[360px]:pt-[14px]
-            absolute z-[1]
-            left-5 right-5
-            min-[361px]:left-6 min-[361px]:right-6
-          "
-        >
+          <div className={styles.reactionContainer}>
           {topReactions.map((reaction) => (
             <div
               key={reaction.id}
-              className={`
-                flex justify-center items-center
-                rounded-[32px] gap-1
-                max-[360px]:min-w-[50px] max-[360px]:h-7 max-[360px]:px-2 max-[360px]:py-1 max-[360px]:text-12-regular
-                min-[361px]:min-w-[66px] min-[361px]:h-9 min-[361px]:px-3 min-[361px]:py-2 min-[361px]:text-16-regular
-                ${reactionBadgeClass}
-              `}
+              className={`${styles.reactionBadge} ${reactionBadgeClass}`}
             >
               <span>{reaction.emoji}</span>
               <span>{reaction.count}</span>
@@ -259,4 +251,3 @@ function CardList({ recipient }) {
 }
 
 export default CardList
-
