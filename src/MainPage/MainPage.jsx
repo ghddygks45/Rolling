@@ -50,12 +50,12 @@ export default function MainPage() {
 
           <div className="max-w-[470px] max-xt:max-w-[470px] max-xs:max-w-[260px] mx-auto px-4">
             {/* 상단 반응 버튼 바 */}
-            <img src={introImg02} alt="" className="w-full ml-[50px] max-xt:ml-[30px] max-xs:ml-[5px]" />
+            <img src={introImg02} alt="" className="w-full" />
           
 
             {/* 팝오버 카드 */}
-            <div className="mx-auto max-w-[293px] max-xt:static mt-[-12px] max-xt:mt-[-12px] max-xs:mt-[-12px]">
-                <img src={introImg03} alt=""  />
+            <div className="max-w-[293px] ml-[30px] mr-[67px] max-xs:ml-[2px] mt-[-12px] max-xt:mt-[-12px]">
+                <img src={introImg03} alt="" className="w-full"/>
             </div>
           </div>
         </div>
