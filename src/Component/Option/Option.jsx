@@ -11,9 +11,8 @@ const COLOR_ITEMS = [
 const CheckIcon = () => (
   // 체크 표시
   <div className="w-[44px] h-[44px] rounded-full bg-gray-500 flex items-center justify-center">
-    <div className='w-[24px] h-[24px] rounded-full flex items-center justify-center'>
+    <div className="w-[24px] h-[24px] rounded-full flex items-center justify-center">
       <img src={Check} alt="체크 표시" />
-
     </div>
   </div>
 );
