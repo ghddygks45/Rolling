@@ -59,10 +59,11 @@ function RollingSwiper({ cards, sliderKey, viewportWidth }) {
   const safeCards = useMemo(() => (Array.isArray(cards) ? cards : []), [cards])
 
   const isMobile = viewportWidth <= 360
-  const isTablet = viewportWidth > 360 && viewportWidth <= 1024
+  const isTablet = viewportWidth > 360 && viewportWidth <= 768
+  const isTabletLarge = viewportWidth > 768 && viewportWidth <= 1024
   const isDesktop = viewportWidth > 1024
   // 화면 크기에 따라 보이는 카드 수
-  const visibleCount = isDesktop ? CARDS_PER_VIEW : isTablet ? 3 : 1
+  const visibleCount = isDesktop ? CARDS_PER_VIEW : (isTablet || isTabletLarge) ? 3 : 1
   const totalSlides = safeCards.length
   // maxStartIndex: 마지막 카드가 완전히 보이도록 하는 최대 시작 인덱스
   // 예: 13개 카드, 4개씩 보이면 index 9에서 카드 10-13이 완전히 보임
@@ -119,7 +120,7 @@ function RollingSwiper({ cards, sliderKey, viewportWidth }) {
       
       // activeIndex를 우선 사용 (swiper.activeIndex와 동기화되어 있음)
       const currentIndex = activeIndex
-      let step = isDesktop ? CARDS_PER_GROUP : viewportWidth > 768 ? 3 : 1
+      let step = isDesktop ? CARDS_PER_GROUP : (isTablet || isTabletLarge) ? 3 : 1
       
       // 오른쪽으로 이동할 때 마지막 처리
       if (delta > 0 && totalSlides > visibleCount) {
@@ -188,7 +189,7 @@ function RollingSwiper({ cards, sliderKey, viewportWidth }) {
         setActiveIndex(target) // activeIndex 즉시 업데이트
       }
     },
-    [activeIndex, maxStartIndexForLastCard, maxStartIndexWithEmpty, isDesktop, totalSlides, visibleCount, viewportWidth]
+    [activeIndex, maxStartIndexForLastCard, maxStartIndexWithEmpty, isDesktop, isTablet, isTabletLarge, totalSlides, visibleCount]
   )
 
   const handleWheel = useCallback(
@@ -222,8 +223,8 @@ function RollingSwiper({ cards, sliderKey, viewportWidth }) {
 
       <Swiper
         spaceBetween={cardGap}
-        slidesPerView={isDesktop ? CARDS_PER_VIEW : viewportWidth > 768 ? 3 : 'auto'}
-        slidesPerGroup={isDesktop ? CARDS_PER_GROUP : viewportWidth > 768 ? 3 : 1}
+        slidesPerView={isDesktop ? CARDS_PER_VIEW : (isTablet || isTabletLarge) ? 3 : 'auto'}
+        slidesPerGroup={isDesktop ? CARDS_PER_GROUP : (isTablet || isTabletLarge) ? 3 : 1}
         allowTouchMove={!isDesktop}
         loop={false}
         touchEventsTarget="container"
@@ -458,8 +459,8 @@ function ListPage() {
         </div>
       </header>
 
-      <main className={`flex flex-col items-center gap-[50px] pt-[30px] pb-6 min-[769px]:pb-[172px] overflow-hidden min-[769px]:overflow-visible ${styles.mainLayout}`}>
-        <section className={`w-full max-w-[1160px] flex flex-col gap-4 ${styles.section}`}>
+      <main className={`flex flex-col items-center ${styles.mainLayout}`}>
+        <section className={`w-full flex flex-col gap-4 ${styles.section}`}>
           <div className={`flex items-center justify-between ${styles.sectionHeader}`}>
             <h2 className={`text-24-bold text-gray-900 ${styles.sectionTitle}`}>
               인기 TOP 8 🔥
@@ -477,7 +478,7 @@ function ListPage() {
           )}
         </section>
 
-        <section className={`w-full max-w-[1160px] flex flex-col gap-4 ${styles.section}`}>
+        <section className={`w-full flex flex-col gap-4 ${styles.section}`}>
           <div className={`flex items-center justify-between ${styles.sectionHeader}`}>
             <h2 
               onClick={() => navigate('/recent')}
@@ -503,12 +504,8 @@ function ListPage() {
           )}
         </section>
 
-        <div className={`w-full max-w-[1201px] flex flex-col items-center mt-[-8px] ${styles.bottomShell}`}>
-          <div
-            className={`relative flex justify-center [&>button]:w-[280px] [&>button]:h-[56px] [&>button]:bg-[#9935FF] [&>button]:rounded-[12px] [&>button]:px-6 [&>button]:py-[14px] [&>button]:gap-[10px] [&>button]:font-[700] [&>button]:text-[18px] [&>button]:leading-[28px] [&>button]:tracking-[-0.01em] [&>button]:shadow-[0_4px_10px_rgba(153,53,255,0.2)] ${styles.bottomButtonWrap}`}
-          >
-            <PrimaryMain text="나도 만들어보기" to="/post" />
-            </div>
+        <div className={`w-full flex flex-col items-center ${styles.bottomShell}`}>
+          <PrimaryMain text="나도 만들어보기" to="/post" />
         </div>
       </main>
     </div>
