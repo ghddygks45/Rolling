@@ -7,7 +7,7 @@ function Header() {
     <>
       <div className="border-b border-gray-200">
         <header className="bg-white sticky top-0 z-50 max-w-[1199px] h-[64px] mx-auto">
-          <div className="w-full h-full flex items-center justify-between">
+          <div className="w-full h-full flex items-center justify-between px-5 min-[769px]:px-6">
             {/* Rolling 로고 영역 */}
             <div className="flex items-center justify-center justify-items-center z-60 h-[30px]">
               {/* 로고 아이콘 */}

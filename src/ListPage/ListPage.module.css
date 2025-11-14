@@ -201,6 +201,8 @@
   .headerShell :global(> div > header > div) {
     height: 40px;
     gap: 79px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   .headerShell :global(> div > header > div > div:first-child) {
@@ -311,6 +313,8 @@
     width: 100%;
     max-width: 720px;
     margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -434,6 +438,8 @@
     width: 100%;
     max-width: 960px;
     margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
