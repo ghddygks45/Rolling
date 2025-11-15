@@ -152,14 +152,14 @@ finalContent = match[1].trim();
                   {/* 첫 번째 5개 그룹 */}
                   <div className="grid grid-cols-5 gap-1">
                     {firstFive.map((imageUrl, index) => (
-                      <img alt="공유"
+                      <img
                         key={index}
                         src={imageUrl}
                         className={`w-[56px] rounded-full object-cover cursor-pointer ${
                           selectedProfileImage === imageUrl
                             ? "border-[3px] border-purple-600 p-1"
                             : "opacity-70 hover:opacity-100"
-                        }` }
+                        }`}
                         onClick={() => setSelectedProfileImage(imageUrl)}
                       />
                     ))}
@@ -168,7 +168,7 @@ finalContent = match[1].trim();
                   {/* 두 번째 5개 그룹 */}
                   <div className="grid grid-cols-5 gap-1">
                     {secondFive.map((imageUrl, index) => (
-                      <img alt="공유"
+                      <img
                         key={index}
                         src={imageUrl}
                         className={`w-[56px] rounded-full object-cover cursor-pointer ${

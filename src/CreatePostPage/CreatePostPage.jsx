@@ -4,7 +4,7 @@ import HeaderNobutton from "../Component/Header/HeaderNobutton";
 import Input from "../Component/Text_Field/Input";
 import ToggleButton from "../Component/Button/Toggle-button";
 import Option from "../Component/Option/Option";
-import PrimaryMain from "../Component/Button/Primary-main";
+import Primarypc from "../Component/Button/Primary-pc";
 import apiClient from "../api/client";
 import { createRecipient } from "../api/recipients"; // 수신인 생성 API 함수 사용
 
@@ -262,8 +262,8 @@ function CreatePostPage() {
         </div>
 
         {/* ✅ 생성 버튼 영역: 예전 마진 로직 복원 */}
-        <div className={`w-full h-full py-[24px] mt-[69px] flex justify-center items-center max-ta:mt-[340px] max-xt:mt-[316px] max-xs:mt-[83px]`}>
-          <PrimaryMain
+        <div className={`w-full h-full max-xt:w-full py-[24px] mt-[69px] flex justify-center items-center max-ta:mt-[340px] max-xt:mt-[316px] max-xs:mt-[83px]`}>
+          <Primarypc
             text={submitting ? "생성 중..." : "생성하기"}
             to={null}
             disabled={!isValid || submitting}
