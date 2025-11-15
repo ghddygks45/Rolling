@@ -13,11 +13,6 @@ function Send() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // 관계 선택 상태
-  const [selectedRelation, setSelectedRelation] = useState(null);
-  // 폰트 선택 상태
-  const [selectedFont, setSelectedFont] = useState(null);
-
   // 프로필 이미지 상태
   const [profileImages, setProfileImages] = useState([]);
   const [selectedProfileImage, setSelectedProfileImage] = useState(null);
@@ -34,6 +29,8 @@ function Send() {
     { label: "동료", value: "동료" },
     { label: "가족", value: "가족" },
   ];
+  // 관계 선택 상태 기본값 지인
+  const [selectedRelation, setSelectedRelation] = useState(relationOptions[1]);
 
   const fontOptions = [
     { label: "Noto Sans", value: "Noto Sans" },
@@ -41,6 +38,10 @@ function Send() {
     { label: "나눔명조", value: "나눔명조" },
     { label: "나눔손글씨 손편지체", value: "나눔손글씨 손편지체" },
   ];
+
+  // 폰트 선택 상태
+  const [selectedFont, setSelectedFont] = useState(fontOptions[0]);
+
   const ROOT_API_URL = "https://rolling-api.vercel.app";
   
   const fetchProfileImages = async () => {

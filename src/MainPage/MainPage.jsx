@@ -54,7 +54,7 @@ export default function MainPage() {
           
 
             {/* 팝오버 카드 */}
-            <div className="max-w-[293px] ml-[30px] mr-[67px] mt-[-12px] max-xt:mt-[-12px]">
+            <div className="max-w-[293px] ml-[42px] mr-[67px] mt-[-12px] max-xt:mt-[-12px] max-xt:ml-[35px] max-xs:ml-[24px]">
                 <img src={introImg03} alt="" className="w-full"/>
             </div>
           </div>
