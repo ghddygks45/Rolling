@@ -14,7 +14,7 @@ import HeaderNobutton from "../Component/Header/HeaderNobutton"; // OwnerPage와
 import MobileHeader from "../Component/Header/MobileHeader";
 import MessageHeader from "../Component/Header/MessageHeader";
 import Modal from "../Component/Modal/Modal";
-import UserCard, { defaultMessage } from "../Component/Card/UserCard"; // 메시지 삭제 기능이 없는 UserCard 유지
+import UserCard from "../Component/Card/UserCard"; // 메시지 삭제 기능이 없는 UserCard 유지
 import AddCard from "../Component/Card/AddCard"; // 새 메시지 작성 기능 유지
 
 // **[추가]** OwnerPage에서 가져온 색상 매핑
@@ -125,8 +125,7 @@ function RecipientPage() {
   }, [loadData]);
 
   // 랜더링 데이터 선택: 메시지가 없거나 로딩 실패 시 더미 데이터 표시
-  const messagesToRender =
-    messages && messages.length > 0 ? messages : Array(6).fill(defaultMessage);
+  const messagesToRender =messages ;
 
   // 작성자 프로필 아바타
   const topAvatars = useMemo(() => {
@@ -259,9 +258,9 @@ function RecipientPage() {
             )}
 
             {/* 카드 목록 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[24px] mt-[28px] relative z-10 px-[24px]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[24px] mt-[28px] relative z-10 px-[24px] ">
               {/* 메시지 추가 버튼 (RecipientPage 기능 유지) */}
-              <div onClick={handleAddCardClick} className="cursor-pointer">
+              <div onClick={handleAddCardClick} className="cursor-pointer w-full min-w-0">
                 <AddCard />
               </div>
               
@@ -269,7 +268,7 @@ function RecipientPage() {
               {hasMessages ? (
                 messages.map((message) => (
                     <UserCard
-                      key={message.id}
+                      key={message.id} className="min-w-0"
                       message={message}
                       onClick={() => handleCardClick(message)}
                     />

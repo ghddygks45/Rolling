@@ -78,6 +78,19 @@ function OwnerPage({ recipientId }) {
     [recipientId, paramsId]
   );
 
+  useEffect(() => {
+    if (currentRecipientId) {
+      // 로컬 스토리지에서 소유자 키를 확인
+      const isOwner = localStorage.getItem(`owner_${currentRecipientId}`) === 'true';
+
+      if (!isOwner) {
+        console.warn(`ID ${currentRecipientId}: 소유자 권한 없음. 방문자 페이지로 리다이렉트.`);
+        // 소유자가 아니면 '/post/:id' 경로로 리다이렉트 (RecipientPage로 이동)
+        navigate(`/post/${currentRecipientId}`, { replace: true });
+      }
+    }
+  }, [currentRecipientId, navigate]);
+
   // ====== 데이터 로드 (페이지 정보 / 메시지 / 반응) ======
   const loadData = useCallback(async () => {
     if (!currentRecipientId) {
