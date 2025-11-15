@@ -472,7 +472,7 @@ function ListPage() {
               </h2>
             </div>
             {loading ? (
-              <p className="text-14-regular text-gray-500 translate-x-6 max-ta:translate-x-0">데이터를 불러오는 중입니다...</p>
+              <p className="text-14-regular text-gray-500 translate-x-6 max-ta:translate-x-0 text-center">데이터를 불러오는 중입니다...</p>
             ) : error ? (
               <div className="text-14-regular text-red-500">
                 <p>데이터를 불러오지 못했습니다.</p>
@@ -500,7 +500,7 @@ function ListPage() {
               </h2>
             </div>
             {loading ? (
-              <p className="text-14-regular text-gray-500 translate-x-6 max-ta:translate-x-0">데이터를 불러오는 중입니다...</p>
+              <p className="text-14-regular text-gray-500 translate-x-6 max-ta:translate-x-0 text-center">데이터를 불러오는 중입니다...</p>
             ) : error ? (
               <div className="text-14-regular text-red-500">
                 <p>데이터를 불러오지 못했습니다.</p>
