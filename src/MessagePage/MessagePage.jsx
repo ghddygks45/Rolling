@@ -113,18 +113,35 @@ function Send() {
 
   // 폴로라 라이센스 삭제 함수
 useEffect(() => {
-    // 500밀리초(0.5초) 간격으로 반복 실행
-    const intervalId = setInterval(() => {
-      const link = document.querySelector('a[href*="froala.com/wysiwyg_editor-download/"]');
-
-      if (link) { 
-        // 💡 link가 존재하면 (null이 아니면)
-        link.parentNode?.remove(); // 옵셔널 체이닝으로 안전하게 제거 
+    const removeWatermark = () => {
+      // 💡 z-index가 9999인 <div> 요소를 찾습니다.
+      // 이 스타일은 워터마크 <div>에 고유할 가능성이 높습니다.
+      const watermarkDiv = document.querySelector('div[style*="z-index:9999"]');
+      
+      if (watermarkDiv) {
+        watermarkDiv.remove();
+        return true; // 제거 성공
       }
-    }, 100); // 간격 설정 (예: 500ms)
+      return false; // 제거 실패
+    };
 
-    // 🧹 컴포넌트가 언마운트될 때 (사라질 때) 인터벌도 정리
-    return () => clearInterval(intervalId);
+    // 늦게 로드될 경우를 대비하여 MutationObserver 사용 (가장 안정적)
+    if (removeWatermark()) {
+      return; // 이미 찾아서 제거했으면 옵저버를 실행할 필요 없음
+    }
+
+    // MutationObserver 설정: 요소가 나중에 추가될 때까지 기다림
+    const observer = new MutationObserver((mutationsList, obs) => {
+      if (removeWatermark()) {
+        obs.disconnect(); // 제거 성공 후 감시 중단
+      }
+    });
+
+    // DOM 전체의 변화를 감시
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // 컴포넌트 언마운트 시 정리
+    return () => observer.disconnect();
   }, []);
 
   return (
