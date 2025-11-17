@@ -114,7 +114,7 @@ function Send() {
   // 폴로라 라이센스 삭제 함수
   useEffect(() => {
     setTimeout(() => {
-      const link = document.querySelector('a[href*="froala.com/wysiwyg_editor-download"]');
+      const link = document.querySelector('a[href*="froala.com/wysiwyg_editor-download/"]');
       if (link && link.parentNode) {
         link.parentNode.remove();
       }
