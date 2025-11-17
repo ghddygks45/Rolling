@@ -112,15 +112,27 @@ function Send() {
   const imagesToDisplay = profileImages.slice(0, 10);
 
   // 폴로라 라이센스 삭제 함수
-  useEffect(() => {
-    setTimeout(() => {
-      const link = document.querySelector('a[href*="froala.com/wysiwyg_editor-download"]');
-      if (link && link.parentNode) {
-        link.parentNode.remove();
+useEffect(() => {
+    const removeWatermark = () => {
+      const watermarkDiv = document.querySelector('div[style*="z-index:9999"]');
+      
+      if (watermarkDiv) {
+        watermarkDiv.remove();
+        return true;
       }
-    }, 1000);
+      return false; 
+    };
+    if (removeWatermark()) {
+      return; 
+    }
+    const observer = new MutationObserver((mutationsList, obs) => {
+      if (removeWatermark()) {
+        obs.disconnect();
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
   }, []);
-
   return (
     <>
       <Header />
