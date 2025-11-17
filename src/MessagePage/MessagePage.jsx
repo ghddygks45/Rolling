@@ -113,26 +113,27 @@ function Send() {
 
   // 폴로라 라이센스 삭제 함수
 useEffect(() => {
-    const removeWatermark = () => {
-      // 💡 z-index가 9999인 <div> 요소를 찾습니다.
-      // 이 스타일은 워터마크 <div>에 고유할 가능성이 높습니다.
-      const watermarkDiv = document.querySelector('div[style*="z-index:9999"]');
-      
-      if (watermarkDiv) {
-        watermarkDiv.remove();
-        return true; // 제거 성공
+    const removeWatermarkByText = () => {
+      // 💡 DOM의 모든 요소를 가져옵니다.
+      const allElements = document.querySelectorAll('*');
+      const targetText = 'Powered by Froala Editor';
+
+      for (const element of allElements) {
+        // 요소의 내부 텍스트가 해당 문구를 포함하는지 확인합니다.
+        if (element.textContent.includes(targetText)) {
+          // 텍스트를 포함하는 요소 자체(혹은 그 부모)를 제거합니다.
+          // 워터마크가 보통 <a> 태그나 <div> 태그로 되어 있으므로, 해당 요소를 바로 제거합니다.
+          element.remove();
+          return true; // 제거 성공
+        }
       }
       return false; // 제거 실패
     };
 
-    // 늦게 로드될 경우를 대비하여 MutationObserver 사용 (가장 안정적)
-    if (removeWatermark()) {
-      return; // 이미 찾아서 제거했으면 옵저버를 실행할 필요 없음
-    }
-
-    // MutationObserver 설정: 요소가 나중에 추가될 때까지 기다림
+    // 늦게 로드되는 경우를 대비하여 MutationObserver 사용
+    // 워터마크가 DOM에 추가되는 순간을 감지합니다.
     const observer = new MutationObserver((mutationsList, obs) => {
-      if (removeWatermark()) {
+      if (removeWatermarkByText()) {
         obs.disconnect(); // 제거 성공 후 감시 중단
       }
     });
