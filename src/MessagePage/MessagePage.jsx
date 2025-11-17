@@ -115,10 +115,9 @@ function Send() {
   useEffect(() => {
     setTimeout(() => {
       const link = document.querySelector('a[href*="froala.com/wysiwyg_editor-download"]');
-      if (link.parentNode) {
+      if (link && link.parentNode) {
         link.parentNode.remove();
       }
-      console.log(link.parentNode);
     }, 0);
   }, []);
 
