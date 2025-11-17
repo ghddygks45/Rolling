@@ -25,3 +25,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+[data-f-id="pbf"] {
+  display: none !important;
+}
+div[style*="z-index:9999"] {
+  display: none !important;
+}
