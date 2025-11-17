@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 // 더미 데이터를 별도 관리 파일로 뺄지 여부 고민!!!!
 
@@ -29,6 +29,22 @@ const RELATIONSHIP_COLORS = {
 function UserCard({ message, onClick }) {
   const data = message;
   const relationshipStyle = RELATIONSHIP_COLORS[data.relationship] || RELATIONSHIP_COLORS.default;
+
+  const decodedHtml = useMemo(() => {
+    const raw = data.content || "";
+    // 엔티티가 없다면 그대로 반환
+    if (!/[&][lg]t;|&amp;|&#/.test(raw)) return raw;
+    const doc = new DOMParser().parseFromString(raw, "text/html");
+    return doc.documentElement.textContent || raw;
+  }, [data.content]);
+
+  // 2) 허용 태그만 남기고 나머지 태그 제거(스크립트/스타일 차단)
+  const contentHtml = useMemo(() => {
+    return decodedHtml.replace(
+      /<(?!\/?(b|strong|i|em|u|p|br|span)\b)[^>]*>/gi,
+      ""
+    );
+  }, [decodedHtml]);
 
   return (
     <>
@@ -84,6 +100,7 @@ function UserCard({ message, onClick }) {
           </div>
         </div>
         <div
+<<<<<<< HEAD
           className="h-[106px] break-all overflow-hidden text-ellipsis line-clamp-4
             text-[18px] leading-[1.5]
             mt-4
@@ -92,6 +109,11 @@ function UserCard({ message, onClick }) {
         >
           {data.content}
         </div>
+=======
+          className="w-[336px] h-[106px] text-[18px] leading-[1.5] mt-4 text-grayscale-600 overflow-hidden"
+          dangerouslySetInnerHTML={{ __html: contentHtml }}
+        />
+>>>>>>> e9f5b0f7959a5707f735c415cc1a23c09154a990
 
         <div
           className="
