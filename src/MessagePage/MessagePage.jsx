@@ -118,7 +118,7 @@ function Send() {
       if (link && link.parentNode) {
         link.parentNode.remove();
       }
-    }, 0);
+    }, 1000);
   }, []);
 
   return (
