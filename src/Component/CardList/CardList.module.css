@@ -35,7 +35,7 @@
   flex-wrap: nowrap;
   /* 카드 밖으로 나가지 않도록 최대 너비 제한 */
   max-width: 100%;
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
   overflow: hidden; /* 배지가 컨테이너 밖으로 나가지 않도록 */
 }
 
@@ -67,7 +67,7 @@
   /* 내부 텍스트 오버플로우 처리 */
   overflow: hidden;
   flex-shrink: 1; /* 공간이 부족할 때 축소 가능 */
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
   /* 배지가 컨테이너 밖으로 나가지 않도록 - flex-shrink 활성화 */
   flex: 0 1 auto;
   /* 배경 크기가 부드럽게 전환되도록 */
