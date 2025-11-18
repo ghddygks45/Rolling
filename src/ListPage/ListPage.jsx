@@ -194,12 +194,19 @@ function RollingSwiper({ cards, sliderKey, viewportWidth }) {
     };
   }, [handleWheel, isDesktop]);
 
+  // 왼쪽 패딩: main의 px-6 (24px)에 맞춤
   const slidesOffset = useMemo(() => {
     if (isDesktop) return 0
-    if (isMobile) return 16
-    if (viewportWidth <= 768) return 20
+    // 모든 비데스크톱 화면에서 main 패딩(24px)과 일치
     return 24
-  }, [isDesktop, isMobile, viewportWidth])
+  }, [isDesktop])
+
+  // 오른쪽 패딩: main의 px-6 (24px)에 맞춤으로써 카드가 잘리지 않도록 함
+  const slidesOffsetAfter = useMemo(() => {
+    if (isDesktop) return 0
+    // main 패딩(24px)에 맞춰서 오른쪽 여백 확보
+    return 24
+  }, [isDesktop])
 
   return (
     <div
@@ -228,7 +235,7 @@ function RollingSwiper({ cards, sliderKey, viewportWidth }) {
         slidesPerView={useAutoSlides ? 'auto' : CARDS_PER_VIEW}
         slidesPerGroup={useAutoSlides ? 1 : CARDS_PER_GROUP}
         slidesOffsetBefore={slidesOffset}
-        slidesOffsetAfter={slidesOffset}
+        slidesOffsetAfter={slidesOffsetAfter}
         allowTouchMove={!isDesktop}
         loop={false}
         touchEventsTarget="container"
@@ -462,10 +469,10 @@ function ListPage() {
         </div>
       </header>
 
-      <main className="flex flex-col items-center w-full pt-[50px] pb-6 gap-[50px] overflow-visible px-6 max-ta:px-0 max-ta:overflow-hidden max-xt:w-full max-xt:pt-[50px] max-xt:items-start max-xt:gap-[74px] max-xs:pt-[50px] max-xs:gap-[74px] max-xs:items-start">
+      <main className="flex flex-col items-center w-full pt-[50px] pb-6 gap-[50px] overflow-visible px-6 max-ta:overflow-hidden max-xt:w-full max-xt:pt-[50px] max-xt:items-start max-xt:gap-[74px] max-xs:pt-[50px] max-xs:gap-[74px] max-xs:items-start">
         {/* **[참고]** max-w 컨테이너와 패딩을 분리하기 위한 구조 변경 */}
         <section className="w-full flex flex-col gap-4 max-w-[1160px] max-ta:max-w-full">
-          <div className="max-xt:px-6 max-xs:px-5"> {/* 제목용 패딩 래퍼 */}
+          <div> {/* 제목용 패딩 래퍼 */}
             <div className={`flex items-center justify-between max-xt:flex-col max-xt:items-start gap-4 ${styles.sectionHeaderRow}`}>
               <h2 className="mb-4 text-24-bold text-gray-900 max-xt:text-24-bold max-xs:text-[20px] max-xs:leading-[30px] max-xs:mb-3">
                 인기 TOP 8 🔥
@@ -487,7 +494,7 @@ function ListPage() {
 
         {/* **[참고]** max-w 컨테이너와 패딩을 분리하기 위한 구조 변경 */}
         <section className="w-full flex flex-col gap-4 max-w-[1160px] max-ta:max-w-full">
-          <div className="max-xt:px-6 max-xs:px-5"> {/* 제목용 패딩 래퍼 */}
+          <div> {/* 제목용 패딩 래퍼 */}
             <div className={`flex items-center justify-between max-xt:items-start gap-4 max-xt:flex-row ${styles.sectionHeaderRow}`}>
               <h2
                 className="mb-4 text-24-bold text-gray-900 max-xt:text-24-bold max-xs:text-[20px] max-xs:leading-[30px] max-xs:mb-3"
@@ -503,12 +510,13 @@ function ListPage() {
                             hover:text-purple-600 
                             transition-colors
                             relative
+                            whitespace-nowrap
                             after:content-['>']
                             after:ml-1
                             after:group-hover:text- purple-600
                             max-xt:pr-[24px]
                           "
-                >
+              >
                 전체보기
               </button>
             </div>
@@ -526,7 +534,7 @@ function ListPage() {
           </div>
         </section>
 
-        <div className="w-full flex flex-col items-center max-w-[1160px] mt-12 mb-12 max-ta:max-w-full max-xt:px-6 max-xs:px-5">
+        <div className="w-full flex flex-col items-center max-w-[1160px] mt-12 mb-12 max-ta:max-w-full">
           <PrimaryMain text="나도 만들어보기" to="/post" />
         </div>
       </main>
