@@ -88,10 +88,10 @@ function Modal({ isOpen = false, onClose, onButtonClick, message }) {
                 text-[14px] sm:text-[15px] lg:text-[16px]
                 leading-[22px] sm:leading-[26px] lg:leading-[28px]
                 font-normal tracking-[-0.01em] text-[#5A5A5A]
-                w-full max-w-[500px]
+                w-full
               "
             >
-              <span dangerouslySetInnerHTML={{ __html: contentHtml }} />
+              <span className="break-all" dangerouslySetInnerHTML={{ __html: contentHtml }} />
             </p>
           </div>
         </div>
