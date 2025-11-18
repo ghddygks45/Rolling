@@ -251,7 +251,7 @@ function MobileHeader({ reactions = [], onAddReaction, recipient }) {
           </div>
 
           {/* 구분선 */}
-          <div className="w-[1px] h-6 bg-gray-200 mx-[15px]"></div>
+          <div className="w-[1px] h-6 bg-gray-200 mx-[7px] sm:mx-[15px]"></div>
 
           {/* 공유 버튼 */}
           <div className="relative">

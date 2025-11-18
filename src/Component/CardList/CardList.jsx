@@ -132,7 +132,7 @@ function CardList({ recipient, isRecent }) {
           pt-6 pr-5 pb-5 pl-5
           min-[361px]:h-[260px]
           min-[361px]:pt-[30px] min-[361px]:pr-6 min-[361px]:pb-5 min-[361px]:pl-6
-          border border-grayscale-500/20
+          border border-gray-500/20
           shadow-[0_2px_13px_rgba(0,0,0,0.08)]
           bg-cover bg-center
           transition-colors duration-200
@@ -143,7 +143,7 @@ function CardList({ recipient, isRecent }) {
         }}
       >
       {isImageCard && (
-        <div className="absolute inset-0 bg-black/20" aria-hidden="true" />
+        <div className="absolute inset-0 bg-black/20" style={{ boxSizing: 'content-box' }} aria-hidden="true" />
       )}
       {!isImageCard && colorStyle?.pattern && (
         <img
@@ -229,7 +229,7 @@ function CardList({ recipient, isRecent }) {
           min-[361px]:left-6 min-[361px]:right-6
           mt-[17px]
           max-[360px]:mt-4
-            border-t border-grayscale-500/40
+            border-t border-gray-500/40
           "
         aria-hidden="true"
       />
