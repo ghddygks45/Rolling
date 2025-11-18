@@ -143,7 +143,7 @@ function CardList({ recipient, isRecent }) {
         }}
       >
       {isImageCard && (
-        <div className="absolute inset-0 bg-black/20" aria-hidden="true" />
+        <div className="absolute inset-0 bg-black/20" style={{ boxSizing: 'content-box' }} aria-hidden="true" />
       )}
       {!isImageCard && colorStyle?.pattern && (
         <img

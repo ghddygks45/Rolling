@@ -84,7 +84,6 @@
   display: flex;
   width: 100%;
   padding: 0;
-  box-sizing: border-box;
   padding-bottom: 0;
   /* 터치 이벤트 성능 최적화 */
   touch-action: pan-y pan-x;
@@ -197,7 +196,6 @@
     width: 100%;
     overflow: visible;
     padding: 0;
-    transform: translate3d(-20px, 0px, 0px);
   }
 
   .swiperSlide {
@@ -370,14 +368,12 @@
     --card-width: clamp(208px, calc((100vw - 48px - 20px) / 2), 275px);
     --card-height: calc(232px + (var(--card-width) - 208px) * 0.4179104478);
     --card-gap: 20px;
-    transform: translate3d(-20px, 0px, 0px);
   }
 
   .swiperInstance {
     display: flex;
     width: 100%;
     padding: 0;
-    box-sizing: border-box;
     padding-bottom: 0;
   }
 
@@ -479,7 +475,6 @@
     display: flex;
     width: 100%;
     padding: 0;
-    box-sizing: border-box;
     padding-bottom: 0;
   }
 
